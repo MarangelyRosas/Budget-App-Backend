@@ -8,14 +8,25 @@ transactionController.get("/", (req, res) => {
     res.send(transactionArray);    
 });
 
-transactionController.get('/:index', (req, res) => {
-    const { index } = req.params
-    if(transactionArray[index]) {
-    res.send(transactionArray[index]);
-  } else {
-    res.redirect("/404")
-  } 
-  })
+// transactionController.get('/:index', (req, res) => {
+//     const { index } = req.params;
+    
+//     if(transactionArray[index]) {
+//     res.send(transactionArray[index]);
+//   } else {
+//     res.redirect("/404")
+//   } 
+//   })
+
+transactionController.get("/:id", (req,res) => {
+  const { id } = req.params;
+
+   if (transactionArray.find(element=>   element.transactionId == id )) {
+      res.send(transactionArray.find((e)=> e.transactionId == id))
+   } else {
+      res.redirect("/400")
+   }
+});
 
 
   transactionController.post('/', (req, res) => {
@@ -29,7 +40,6 @@ transactionController.get('/:index', (req, res) => {
       }
 
       transactionArray.push(transaction)
-      //transactionArray.push( req.body);
       res.json(transactionArray[transactionArray.length - 1]);
   })
 
@@ -41,16 +51,32 @@ transactionController.put('/:index', (req, res) => {
     } else {
       res.redirect("/404")
     }
-  })
+  });
 
-transactionController.delete("/:index", (req, res) => {
-    const { index } = req.params;
-    if(transactionArray[index]) {
-        transactionArray.splice(index, 1);
-        res.status(200).json({ status: 200, message: "resource deleted" });
-    } else {
+// transactionController.delete("/:index", (req, res) => {
+//     const { index } = req.params;
+//     if(transactionArray[index]) {
+//         transactionArray.splice(index, 1);
+//         res.status(200).json({ status: 200, message: "resource deleted" });
+//     } else {
+//       res.redirect("/404")
+//     }
+// });
+transactionController.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  let indexArr = transactionArray.map((e,i) => {
+      if (e.transactionId == id ) {
+          return i
+      }
+      return -1
+  })
+  console.log(indexArr)
+  if (indexArr.find(e => e != -1)) {
+      transactionArray.splice(indexArr.find(e => Number(e) != -1), 1);
+      res.status(200).json({ status: 200, message: "resource deleted" });
+  }else{
       res.redirect("/404")
-    }
+  }
 });
 
 module.exports = transactionController;
