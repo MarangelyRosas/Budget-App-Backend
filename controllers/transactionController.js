@@ -27,9 +27,10 @@ transactionController.get('/:index', (req, res) => {
         from: req.body.from,
         category: req.body.category,
       }
-    transactionArray.push(transaction)
-    // transArray.push( req.body);
-      res.json(transArray[transArray.length - 1]);
+
+      transactionArray.push(transaction)
+      //transactionArray.push( req.body);
+      res.json(transactionArray[transactionArray.length - 1]);
   })
 
 transactionController.put('/:index', (req, res) => {
@@ -41,15 +42,15 @@ transactionController.put('/:index', (req, res) => {
       res.redirect("/404")
     }
   })
-transactionController.delete("/:id", (req, res) => {
-    const {index} = req.params;
-    if(transactionArray[index]){
+
+transactionController.delete("/:index", (req, res) => {
+    const { index } = req.params;
+    if(transactionArray[index]) {
         transactionArray.splice(index, 1);
         res.status(200).json({ status: 200, message: "resource deleted" });
     } else {
       res.redirect("/404")
     }
 });
-
 
 module.exports = transactionController;

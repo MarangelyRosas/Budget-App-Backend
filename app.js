@@ -20,7 +20,4 @@ app.get("*", (req, res) => {
     res.status(400).json("Page Not Found")
 });
 
-
-
-
 module.exports = app;
